@@ -9,6 +9,8 @@
 #include "db_parser.h"
 #include "product_parser.h"
 #include "util.h"
+#include "datastore.h"
+#include "mydatastore.h"
 
 using namespace std;
 struct ProdNameSorter {
@@ -29,7 +31,7 @@ int main(int argc, char* argv[])
      * Declare your derived DataStore object here replacing
      *  DataStore type to your derived type
      ****************/
-    DataStore ds;
+    MyDataStore ds;
 
 
 
@@ -100,16 +102,37 @@ int main(int argc, char* argv[])
                 done = true;
             }
 	    /* Add support for other commands here */
-
-
-
-
+            else if (cmd == "ADD"){
+                // get username, add hit size, search and find things to add, check if product exists and username exists then call addToCart
+                // use hit_result_index in vector<> hits to access previous product*. then call addToCart(username, product* prod)
+                string uname;
+                size_t search_hit_number;
+                if (ss >> uname && ss >> search_hit_number){
+                    if (search_hit_number <= hits.size()) {
+                        ds.addToCart(uname, hits[search_hit_number - 1]);
+                    } else {
+                        cout << "Bad search index" << endl;
+                    }
+                }
+            }
+            else if (cmd == "VIEWCART"){
+                string uname;
+                if (ss >> uname){
+                    ds.viewCart(uname);
+                }
+            }
+            else if (cmd == "BUYCART"){
+                string uname;
+                if (ss >> uname){
+                    ds.buyCart(uname);
+                }
+            }
             else {
                 cout << "Unknown command" << endl;
             }
         }
-
     }
+    // fix previous hits being added to the vector
     return 0;
 }
 

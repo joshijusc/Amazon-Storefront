@@ -15,16 +15,29 @@ std::string convToLower(std::string src)
     to a set of words based on the criteria given in the assignment **/
 std::set<std::string> parseStringToWords(string rawWords)
 {
-
-
-
-
-
-
-
-
-
-
+    set<string> words;
+    // For the product name, book author, and clothing brand
+    stringstream ss(rawWords);
+    string word;
+    while (ss >> word){  //extracts each word from rawWords
+        if (word.size() >= 2){
+            string shortWord;
+            for (size_t i=0; i<word.size(); i++){
+                if (ispunct(word[i])){
+                    if (shortWord.size() >= 2){
+                        words.insert(shortWord);
+                    }
+                    shortWord = "";
+                } else {
+                    shortWord.push_back(word[i]);
+                }
+            }
+            if (shortWord.size() >= 2){
+                words.insert(shortWord);
+            }
+        }
+    }
+    return words;
 }
 
 /**************************************************
